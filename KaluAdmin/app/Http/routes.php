@@ -15,10 +15,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::group(['middleware' => ['api','cors'],'prefix' => 'api'], function () {
+Route::group(['middleware' => ['api','cors'], 'prefix' => 'api'], function () {
+    
     Route::post('register', 'APIController@register');
+
     Route::post('login', 'APIController@login');
+
     Route::group(['middleware' => 'jwt-auth'], function () {
     	Route::post('get_user_details', 'APIController@get_user_details');
     });
+
 });
