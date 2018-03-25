@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddDetalleMovimientoTabla extends Migration
+class CreateUsersMovementsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,14 @@ class AddDetalleMovimientoTabla extends Migration
     public function up()
     {
         //
-        Schema::create('detalle_movimiento', function (Blueprint $table) {
+        Schema::create('user_movimientos', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('categoria_activo_id')
+            $table->integer('user_id')
                     ->references('id')
-                    ->on('lista_valor');
+                    ->on('users');
             $table->integer('movimiento_id')
                     ->references('id')
                     ->on('movimientos');
-            $table->string('nombre_activo');
-            $table->bigInteger('monto');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -36,6 +34,6 @@ class AddDetalleMovimientoTabla extends Migration
     public function down()
     {
         //
-        Schema::drop('detalle_movimiento');
+        Schema::drop('user_movimientos');
     }
 }

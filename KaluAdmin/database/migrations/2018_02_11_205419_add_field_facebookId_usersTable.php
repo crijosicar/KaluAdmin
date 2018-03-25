@@ -28,7 +28,6 @@ class AddFieldFacebookIdUsersTable extends Migration
     {
         Schema::table('users', function ($table) {
             $table->dropColumn(['facebook_id']);
-
         });
     }
 }

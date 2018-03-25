@@ -33,5 +33,6 @@ class AddConstraintsListaValorTablaYTablaMovimientos extends Migration
     public function down()
     {
         //
+        Schema::drop('lista_valor');
     }
 }
