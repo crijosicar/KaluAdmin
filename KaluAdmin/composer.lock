@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "fa687bccbe95f2a65907aa7d864e223f",
+    "content-hash": "c75ec6ed43cfc84f0e582fcda06eec58",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -2329,6 +2329,53 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "corex/lmodel",
+            "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/corex/lmodel.git",
+                "reference": "dbd83b5a05825c52ba243176feaab72a49c0e3d8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/corex/lmodel/zipball/dbd83b5a05825c52ba243176feaab72a49c0e3d8",
+                "reference": "dbd83b5a05825c52ba243176feaab72a49c0e3d8",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/dbal": "^2.5",
+                "php": ">=5.6.4"
+            },
+            "require-dev": {
+                "laravel/laravel": "5.4.*",
+                "orchestra/testbench": "~3.0",
+                "phpunit/phpunit": "5.7.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "CoRex\\Laravel\\Model\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "CoRex",
+                    "email": "dev@corex.dk"
+                }
+            ],
+            "description": "Laravel Model (generator, constants, preserved lines, phpdoc)",
+            "keywords": [
+                "generator",
+                "laravel",
+                "model"
+            ],
+            "time": "2017-12-13T16:52:00+00:00"
+        },
         {
             "name": "doctrine/instantiator",
             "version": "1.0.5",
