@@ -15,11 +15,12 @@ use Illuminate\Database\Eloquent\Model;
 class UserMovimientos extends Model
 {
 	// Attributes.
-	public $timestamps = false;
-	protected $connection = 'mysql';
 	protected $table = 'user_movimientos';
-	protected $fillable = ['user_id', 'movimiento_id'];
-	protected $guarded = ['id'];
 	
+        protected $fillable = ['user_id', 'movimiento_id'];
+	
+        protected $guarded = ['id'];
+        
+        protected $hidden = [ 'created_at', 'updated_at', 'deleted_at' ];
 	/* ---- Everything after this line will be preserved. ---- */
 }

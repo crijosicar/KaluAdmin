@@ -28,9 +28,10 @@ Route::group(['middleware' => ['api','cors'], 'prefix' => 'api'], function () {
         //Routes for get info of user
     	Route::post('get-user-details', 'RegisterController@get_user_details');
         
-        //Routes for get info of user
+        //Routes for messages
     	Route::post('send-message', 'ConversationController@sendMessage');        
-        
+        Route::post('get-messages', 'ConversationController@getMessagesXUser');        
+
     });
 
 });

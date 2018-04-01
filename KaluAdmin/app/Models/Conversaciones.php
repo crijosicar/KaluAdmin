@@ -16,12 +16,14 @@ use Illuminate\Database\Eloquent\Model;
 class Conversaciones extends Model
 {
 	// Attributes.
-	public $timestamps = false;
-	protected $connection = 'mysql';
 	protected $table = 'conversaciones';
-	protected $fillable = ['user_id', 'mensaje', 'fecha_creacion'];
-	protected $guarded = ['id'];
+	
+        protected $fillable = ['user_id', 'mensaje', 'fecha_creacion', 'is_bot'];
+	
+        protected $guarded = ['id'];
+        
         protected $casts = ['user_id' => 'integer'];
 	
+        protected $hidden = [ 'created_at', 'updated_at', 'deleted_at' ];
 	/* ---- Everything after this line will be preserved. ---- */
 }

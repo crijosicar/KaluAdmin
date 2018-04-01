@@ -17,11 +17,12 @@ use Illuminate\Database\Eloquent\Model;
 class DetalleMovimiento extends Model
 {
 	// Attributes.
-	public $timestamps = false;
-	protected $connection = 'mysql';
 	protected $table = 'detalle_movimiento';
-	protected $fillable = ['categoria_activo_id', 'movimiento_id', 'nombre_activo', 'monto'	];
-	protected $guarded = ['id'];
 	
+        protected $fillable = ['categoria_activo_id', 'movimiento_id', 'nombre_activo', 'monto'	];
+	
+        protected $guarded = ['id'];
+	
+        protected $hidden = [ 'created_at', 'updated_at', 'deleted_at' ];
 	/* ---- Everything after this line will be preserved. ---- */
 }

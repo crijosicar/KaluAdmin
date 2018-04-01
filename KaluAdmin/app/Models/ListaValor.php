@@ -15,11 +15,12 @@ use Illuminate\Database\Eloquent\Model;
 class ListaValor extends Model
 {
 	// Attributes.
-	public $timestamps = false;
-	protected $connection = 'mysql';
 	protected $table = 'lista_valor';
-	protected $fillable = ['categoria', 'valor'];
-	protected $guarded = ['id'];
 	
+        protected $fillable = ['categoria', 'valor'];
+	
+        protected $guarded = ['id'];
+	
+        protected $hidden = [ 'created_at', 'updated_at', 'deleted_at' ];
 	/* ---- Everything after this line will be preserved. ---- */
 }
