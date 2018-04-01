@@ -21,6 +21,7 @@ class Conversaciones extends Model
 	protected $table = 'conversaciones';
 	protected $fillable = ['user_id', 'mensaje', 'fecha_creacion'];
 	protected $guarded = ['id'];
+        protected $casts = ['user_id' => 'integer'];
 	
 	/* ---- Everything after this line will be preserved. ---- */
 }

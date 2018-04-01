@@ -23,16 +23,13 @@ class ConversationController extends Controller
         
         $validator = Validator::make($request->all(), $validations, $messages);
         
-        $conversation = Conversaciones::find(1);
-        dd($conversation);
-        
         if ($validator->fails()) {
             $messages = $validator->messages();
             return response()->json($messages);
         }
-
-    	$payload = $request->all();
-        $payload;
-        return response()->json(['result' => $payload]);
+        
+        $payload = $request->all();
+        $result = Conversaciones::create($payload);
+        return response()->json($result);
     }
 }

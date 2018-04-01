@@ -35,7 +35,7 @@ class RegisterController extends Controller
     	$input = $request->all();
     	$input['password'] = Hash::make($input['password']);
     	User::create($input);
-        return response()->json(['result'=>true]);
+        return response()->json(['result' => true]);
     }
 
 
@@ -52,7 +52,8 @@ class RegisterController extends Controller
     public function get_user_details(Request $request)
     {
     	$input = $request->all();
-    	$user = JWTAuth::toUser($input['token']);
+        $authorization = $request->header('Authorization');
+    	$user = JWTAuth::toUser($authorization);
         return response()->json(['result' => $user]);
     }
 
