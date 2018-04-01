@@ -29,7 +29,7 @@ Route::group(['middleware' => ['api','cors'], 'prefix' => 'api'], function () {
     	Route::post('get-user-details', 'RegisterController@get_user_details');
         
         //Routes for get info of user
-    	Route::post('send-message', 'RegisterController@get_user_details');        
+    	Route::post('send-message', 'ConversationController@sendMessage');        
         
     });
 
