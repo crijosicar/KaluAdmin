@@ -17,12 +17,20 @@ Route::get('/', function () {
 
 Route::group(['middleware' => ['api','cors'], 'prefix' => 'api'], function () {
     
-    Route::post('register', 'APIController@register');
+    //Routes for register
+    Route::post('register', 'RegisterController@register');
+    
+    //Routes for login
+    Route::post('login', 'RegisterController@login');
 
-    Route::post('login', 'APIController@login');
-
+    //Routes for get authenticated users
     Route::group(['middleware' => 'jwt-auth'], function () {
-    	Route::post('get_user_details', 'APIController@get_user_details');
+        //Routes for get info of user
+    	Route::post('get-user-details', 'RegisterController@get_user_details');
+        
+        //Routes for get info of user
+    	Route::post('send-message', 'RegisterController@get_user_details');        
+        
     });
 
 });
