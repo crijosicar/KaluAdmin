@@ -25,5 +25,6 @@ class Movimientos extends Model
         protected $guarded = ['id'];
 	
         protected $hidden = [ 'created_at', 'updated_at', 'deleted_at' ];
-	/* ---- Everything after this line will be preserved. ---- */
+
+        
 }

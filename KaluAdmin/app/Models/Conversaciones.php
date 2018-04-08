@@ -15,8 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Conversaciones extends Model
 {
-	// Attributes.
-	protected $table = 'conversaciones';
+        protected $table = 'conversaciones';
 	
         protected $fillable = ['user_id', 'mensaje', 'fecha_creacion', 'is_bot'];
 	
@@ -25,5 +24,6 @@ class Conversaciones extends Model
         protected $casts = ['user_id' => 'integer'];
 	
         protected $hidden = [ 'created_at', 'updated_at', 'deleted_at' ];
-	/* ---- Everything after this line will be preserved. ---- */
+
+        
 }

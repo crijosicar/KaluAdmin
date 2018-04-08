@@ -45,15 +45,13 @@ class RegisterController extends Controller
     	if (!$token = JWTAuth::attempt($input)) {
             return response()->json(['result' => 'wrong email or password.']);
         }
-        	return response()->json(['result' => $token]);
+        return response()->json(['result' => $token]);
     }
 
 
     public function get_user_details(Request $request)
     {
-    	$input = $request->all();
-        $authorization = $request->header('Authorization');
-    	$user = JWTAuth::toUser($authorization);
+    	$user = JWTAuth::toUser( $request->input('token'));
         return response()->json(['result' => $user]);
     }
 
