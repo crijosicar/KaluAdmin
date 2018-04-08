@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Validator;
 use App\Models\Conversaciones;
+use DB;
 
 class ConversationController extends Controller {
 
@@ -49,7 +50,20 @@ class ConversationController extends Controller {
         }
 
         $payload = $request->all();
-        $result = Conversaciones::where('user_id', $payload['user_id'])->paginate(30);
+              
+        $result = DB::table('conversaciones')
+                    ->join('users', 'users.id', '=', 'conversaciones.user_id')
+                    ->where('conversaciones.user_id', $payload['user_id'])
+                    ->select('conversaciones.id', 
+                            'conversaciones.mensaje', 
+                            'conversaciones.fecha_creacion', 
+                            'conversaciones.is_bot', 
+                            'users.id',
+                            'users.email',
+                            'users.name')
+                    ->paginate(30);
+        
+        //$result = Conversaciones::where('user_id', $payload['user_id'])->paginate(30);
         return response()->json($result);
     }
 
