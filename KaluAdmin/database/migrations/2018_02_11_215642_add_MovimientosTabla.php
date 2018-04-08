@@ -33,5 +33,6 @@ class AddMovimientosTabla extends Migration
     public function down()
     {
         //
+        Schema::drop('movimientos');
     }
 }

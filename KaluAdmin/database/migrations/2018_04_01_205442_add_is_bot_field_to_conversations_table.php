@@ -3,20 +3,19 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddFieldFacebookIdUsersTable extends Migration
+class AddIsBotFieldToConversationsTable extends Migration
 {
     /**
      * Run the migrations.
      *
      * @return void
      */
-    public function up() 
+    public function up()
     {
         //
-        Schema::table('users', function ($table) {
-            $table->string('facebook_id')->nullable();
-            });
-    
+        Schema::table('conversaciones', function($table) {
+            $table->boolean('is_bot');
+        });
     }
 
     /**
@@ -26,8 +25,9 @@ class AddFieldFacebookIdUsersTable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function ($table) {
-            $table->dropColumn(['facebook_id']);
+        //
+        Schema::table('conversaciones', function($table) {
+            $table->boolean('is_bot');
         });
     }
 }

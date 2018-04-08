@@ -29,5 +29,6 @@ class AddListaValorTabla extends Migration
     public function down()
     {
         //
+        Schema::drop('lista_valor');
     }
 }
