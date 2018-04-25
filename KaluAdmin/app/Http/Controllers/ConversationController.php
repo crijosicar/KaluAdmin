@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Validator;
 use App\Models\Conversaciones;
 use DB;
+use stdClass;
 
 class ConversationController extends Controller {
 
@@ -50,21 +51,42 @@ class ConversationController extends Controller {
         }
 
         $payload = $request->all();
-              
+
         $result = DB::table('conversaciones')
                     ->join('users', 'users.id', '=', 'conversaciones.user_id')
                     ->where('conversaciones.user_id', $payload['user_id'])
-                    ->select('conversaciones.id', 
-                            'conversaciones.mensaje', 
-                            'conversaciones.fecha_creacion', 
-                            'conversaciones.is_bot', 
+                    ->select('conversaciones.id',
+                            'conversaciones.user_id',
+                            'conversaciones.mensaje',
+                            'conversaciones.fecha_creacion',
+                            'conversaciones.is_bot',
                             'users.id',
                             'users.email',
                             'users.name')
-                    ->paginate(30);
-        
-        //$result = Conversaciones::where('user_id', $payload['user_id'])->paginate(30);
-        return response()->json($result);
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(10);
+
+        $resultAux = new stdClass();
+        $resultAux->perPage = $result->perPage();
+        $resultAux->currentPage = $result->currentPage();
+        $resultAux->total = $result->total();
+        $resultAux->lastPage = $result->lastPage();
+        $resultAux->items = array();
+
+        foreach ($result->items() as $key => $value){
+          $item = new stdClass();
+          $item->createdAt = $value->fecha_creacion;
+          $item->text = $value->mensaje;
+          $item->isBot = $value->is_bot;
+          $item->userID = $value->user_id;
+          $user = new stdClass();
+          $user->email = $value->email;
+          $user->name = $value->name;
+          $item->user = $user;
+          array_push($resultAux->items, $item);
+        }
+
+        return response()->json($resultAux);
     }
 
 }

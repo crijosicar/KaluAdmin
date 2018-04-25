@@ -16,10 +16,10 @@ Route::get('/', function () {
 });
 
 Route::group(['middleware' => ['api','cors'], 'prefix' => 'api'], function () {
-    
+
     //Routes for register
     Route::post('register', 'RegisterController@register');
-    
+
     //Routes for login
     Route::post('login', 'RegisterController@login');
 
@@ -27,10 +27,10 @@ Route::group(['middleware' => ['api','cors'], 'prefix' => 'api'], function () {
     Route::group(['middleware' => 'jwt-auth'], function () {
         //Routes for get info of user
     	Route::post('get-user-details', 'RegisterController@get_user_details');
-        
+
         //Routes for messages
-    	Route::post('send-message', 'ConversationController@sendMessage');        
-        Route::post('get-messages', 'ConversationController@getMessagesXUser');        
+    	Route::post('send-message', 'ConversationController@sendMessage');
+        Route::post('get-messages', 'ConversationController@getMessagesXUser');
 
     });
 
