@@ -46,9 +46,9 @@ class RegisterController extends Controller{
     }
 
 
-    public function get_user_details(Request $request){
-    	$user = JWTAuth::toUser( $request->input('token'));
-        return response()->json(['result' => $user]);
+    public function getUserDetails(Request $request){
+    	  $user = JWTAuth::toUser( $request->input('token'));
+        return response()->json(['user' => $user]);
     }
 
 

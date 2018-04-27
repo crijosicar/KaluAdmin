@@ -26,7 +26,7 @@ Route::group(['middleware' => ['api','cors'], 'prefix' => 'api'], function () {
     //Routes for get authenticated users
     Route::group(['middleware' => 'jwt-auth'], function () {
         //Routes for get info of user
-    	Route::post('get-user-details', 'RegisterController@get_user_details');
+    	Route::post('get-user-details', 'RegisterController@getUserDetails');
 
         //Routes for messages
     	Route::post('send-message', 'ConversationController@sendMessage');
