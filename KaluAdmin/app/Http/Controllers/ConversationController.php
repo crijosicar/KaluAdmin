@@ -26,12 +26,18 @@ class ConversationController extends Controller {
 
         if ($validator->fails()) {
             $messages = $validator->messages();
-            return response()->json($messages);
+            return response()->json([
+              'error' => true,
+              'messages' => $messages
+              ]);
         }
 
         $payload = $request->all();
         $result = Conversaciones::create($payload);
-        return response()->json($result);
+        return response()->json([
+          'error' => false,
+          'result' => $result
+        ]);
     }
 
     public function getMessagesXUser(Request $request) {
@@ -47,7 +53,10 @@ class ConversationController extends Controller {
 
         if ($validator->fails()) {
             $messages = $validator->messages();
-            return response()->json($messages);
+            return response()->json([
+              'error' => true,
+              'messages' => $messages
+              ]);
         }
 
         $payload = $request->all();

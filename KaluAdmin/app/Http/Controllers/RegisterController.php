@@ -23,32 +23,41 @@ class RegisterController extends Controller{
             'name' => 'required',
             'password' => 'required|between:6,10|alpha_num',
             'password_confirm' => 'required|same:password'
-        ],$messages);
+        ], $messages);
 
         if ($validator->fails()) {
             $messages = $validator->messages();
-            return response()->json($messages);
+            return response()->json([
+              'error' => true,
+              'messages' => $messages
+            ]);
         }
 
     	$input = $request->all();
     	$input['password'] = Hash::make($input['password']);
     	User::create($input);
-        return response()->json(['result' => true]);
+        return response()->json(['error' => false]);
     }
 
 
     public function login(Request $request){
     	$input = $request->all();
     	if (!$token = JWTAuth::attempt($input)) {
-            return response()->json(['message' => 'Correo electrónico o contraseña incorrectos']);
+            return response()->json([
+              'error' => true,
+              'message' => 'Correo electrónico o contraseña incorrectos'
+              ]);
         }
-        return response()->json(['token' => $token]);
+        return response()->json([
+          'error' => false,
+          'token' => $token
+        ]);
     }
 
 
     public function getUserDetails(Request $request){
     	  $user = JWTAuth::toUser( $request->input('token'));
-        return response()->json(['user' => $user]);
+        return response()->json(['error' => false, 'user' => $user]);
     }
 
 
