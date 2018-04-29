@@ -73,7 +73,7 @@ class ConversationController extends Controller {
                             'users.email',
                             'users.name')
                     ->orderBy('conversaciones.created_at', 'desc')
-                    ->paginate(10);
+                    ->paginate(6);
 
         $resultAux = new stdClass();
         $resultAux->perPage = $result->perPage();
