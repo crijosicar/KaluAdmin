@@ -56,7 +56,7 @@ class ConversationController extends Controller {
             return response()->json([
               'error' => true,
               'messages' => $messages
-              ]);
+            ]);
         }
 
         $payload = $request->all();

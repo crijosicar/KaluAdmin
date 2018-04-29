@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'es',
 
     /*
     |--------------------------------------------------------------------------
@@ -78,7 +78,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale' => 'es',
 
     /*
     |--------------------------------------------------------------------------
@@ -161,6 +161,8 @@ return [
          * Custom providers
          */
         'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
+        MarkTopper\DoctrineDBALTimestampType\Laravel5ServiceProvider::class,
+
     ],
 
     /*
@@ -206,7 +208,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        
+
         /**
          * Custom aliases
          */
