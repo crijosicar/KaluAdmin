@@ -12,20 +12,27 @@ class RegisterController extends Controller{
 
     public function register(Request $request){
         $messages = [
-            'required' => 'El :attribute es requerido.',
-            'unique' => 'El :attribute debe ser único.',
-            'same'    => 'El :attribute y :other deben coincidir.',
-            'between' => 'El :attribute debe estar entre :min - :max.',
-            'email' => 'El formato para :attribute debe ser: ejemplo@dominio.com.',
-            'alpha_num' => 'El :attribute puede contener solo números y letras.'
+            'required' => 'El campo :attribute es requerido.',
+            'unique' => 'El :attribute ya ha sido tomado.',
+            'same'    => 'El campo :attribute y :other deben coincidir.',
+            'between' => 'El campo :attribute debe estar entre :min - :max.',
+            'email' => 'El campo :attribute debe tener el formato: ejemplo@dominio.com.',
+            'alpha_num' => 'El campo :attribute puede contener solo números y letras.'
         ];
+
+        $niceNames = array(
+            'email' => 'correo electrónico',
+            'name' => 'nombre',
+            'password' => 'contraseña',
+            'password_confirm' => 'confirmación de contraseña'
+        );
 
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users',
             'name' => 'required',
             'password' => 'required|between:6,10|alpha_num',
             'password_confirm' => 'required|same:password'
-        ], $messages);
+        ], $messages, $niceNames);
 
         if ($validator->fails()) {
             $messages = $validator->messages();
@@ -49,7 +56,7 @@ class RegisterController extends Controller{
             return response()->json([
               'error' => true,
               'message' => 'Correo electrónico o contraseña incorrectos'
-              ]);
+            ]);
         }
         return response()->json([
           'error' => false,
