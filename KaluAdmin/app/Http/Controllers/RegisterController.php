@@ -15,7 +15,9 @@ class RegisterController extends Controller{
             'required' => 'El :attribute es requerido.',
             'unique' => 'El :attribute debe ser único.',
             'same'    => 'El :attribute y :other deben coincidir.',
-            'between' => 'El :attribute debe estar entre :min - :max.'
+            'between' => 'El :attribute debe estar entre :min - :max.',
+            'email' => 'El formato para :attribute debe ser: ejemplo@dominio.com.',
+            'alpha_num' => 'El :attribute puede contener solo números y letras.'
         ];
 
         $validator = Validator::make($request->all(), [
@@ -27,6 +29,7 @@ class RegisterController extends Controller{
 
         if ($validator->fails()) {
             $messages = $validator->messages();
+            dd($messages);
             return response()->json([
               'error' => true,
               'messages' => $messages
@@ -35,8 +38,9 @@ class RegisterController extends Controller{
 
     	$input = $request->all();
     	$input['password'] = Hash::make($input['password']);
-    	User::create($input);
-        return response()->json(['error' => false]);
+    	$response = User::create($input);
+      $user = User::find($response->id);
+      return response()->json(['error' => false, 'user' => $user]);
     }
 
 
