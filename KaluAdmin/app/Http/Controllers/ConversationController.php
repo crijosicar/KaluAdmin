@@ -7,6 +7,7 @@ use Validator;
 use App\Models\Conversaciones;
 use DB;
 use stdClass;
+use Carbon\Carbon;
 
 class ConversationController extends Controller {
 
@@ -18,8 +19,7 @@ class ConversationController extends Controller {
 
         $validations = [
             'user_id' => 'required',
-            'mensaje' => 'required',
-            'fecha_creacion' => 'required|date'
+            'mensaje' => 'required'
         ];
 
         $validator = Validator::make($request->all(), $validations, $messages);
@@ -33,6 +33,10 @@ class ConversationController extends Controller {
         }
 
         $payload = $request->all();
+
+        $now = new Carbon();
+        $now->setTimezone('America/Bogota');
+        $payload['fecha_creacion'] = $now->toDateTimeString();
         $result = Conversaciones::create($payload);
         return response()->json([
           'error' => false,
