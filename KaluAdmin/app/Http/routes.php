@@ -23,15 +23,17 @@ Route::group(['middleware' => ['api','cors'], 'prefix' => 'api'], function () {
     //Routes for login
     Route::post('login', 'RegisterController@login');
 
+    //Routes for FB
+    Route::post('get-user-by-fbid', 'RegisterController@getUserByFBID');
+
     //Routes for get authenticated users
     Route::group(['middleware' => 'jwt-auth'], function () {
-        //Routes for get info of user
+      //Routes for get info of user
     	Route::post('get-user-details', 'RegisterController@getUserDetails');
 
-        //Routes for messages
+      //Routes for messages
     	Route::post('send-message', 'ConversationController@sendMessage');
-        Route::post('get-messages', 'ConversationController@getMessagesXUser');
-
+      Route::post('get-messages', 'ConversationController@getMessagesXUser');
     });
 
 });

@@ -49,7 +49,6 @@ class RegisterController extends Controller{
       return response()->json(['error' => false, 'user' => $user]);
     }
 
-
     public function login(Request $request){
     	$input = $request->all();
     	if (!$token = JWTAuth::attempt($input)) {
@@ -64,11 +63,35 @@ class RegisterController extends Controller{
         ]);
     }
 
-
     public function getUserDetails(Request $request){
     	  $user = JWTAuth::toUser( $request->input('token'));
         return response()->json(['error' => false, 'user' => $user]);
     }
 
+    public function getUserByFBID(Request $request){
+        $messages = [
+            'required' => 'El campo :attribute es requerido.'
+        ];
 
+        $niceNames = array(
+            'facebook_id' => 'ID de facebook'
+        );
+
+        $validator = Validator::make($request->all(), [
+            'facebook_id' => 'required'
+        ], $messages, $niceNames);
+
+        if ($validator->fails()) {
+            $messages = $validator->messages();
+            return response()->json([
+              'error' => true,
+              'messages' => $messages
+            ]);
+        }
+
+        $payload = $request->all();
+
+        $user = User::where('facebook_id', $payload['facebook_id'])->first();
+        return response()->json(['error' => false, 'user' => $user]);
+    }
 }
