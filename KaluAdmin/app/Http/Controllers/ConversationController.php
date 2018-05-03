@@ -120,17 +120,6 @@ class ConversationController extends Controller {
           $now->setTimezone('America/Bogota');
           $payload['fecha_creacion'] = $now->toDateTimeString();
           Conversaciones::create($payload);
-
-          if($wtResponse['output']['nodes_visited'][0] === "En otras cosas"){
-            sleep(1);
-            $time = new Carbon();
-            $time->setTimezone('America/Bogota');
-            $payload['fecha_creacion'] = $time->toDateTimeString();
-            $payload['mensaje'] = $wtResponse['output']['text'][0];
-            $payload['is_bot'] = 1;
-            Conversaciones::create($payload);
-          }
-
           return response()->json(["error" => false, "message" => $wtResponse]);
         } else {
           return response()->json(["error" => true, "message" => "Audio no reconocido"]);
