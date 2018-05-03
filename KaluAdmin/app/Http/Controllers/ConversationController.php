@@ -127,7 +127,7 @@ class ConversationController extends Controller {
         ->withData( array( 'input' =>  $textobj) )
         ->asJson( true )
         ->withHeader('Content-Type: application/json')
-        ->withOption('HTTPAUTH', CURLAUTH_BASIC)
+        //->withOption('HTTPAUTH', 'CURLAUTH_BASIC')
         ->withOption('USERPWD', "$this->watsonAssistantUsername:$this->watsonAssistantPassword")
         ->post();
       return $response;
