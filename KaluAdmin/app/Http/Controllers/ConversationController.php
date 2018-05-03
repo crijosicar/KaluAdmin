@@ -122,6 +122,7 @@ class ConversationController extends Controller {
           Conversaciones::create($payload);
 
           if($wtResponse['output']['nodes_visited'][0] === "En otras cosas"){
+            sleep(1);
             $time = new Carbon();
             $time->setTimezone('America/Bogota');
             $payload['fecha_creacion'] = $time->toDateTimeString();
