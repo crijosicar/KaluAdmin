@@ -10,11 +10,17 @@ use stdClass;
 use Carbon\Carbon;
 use Storage;
 use Google\Cloud\Speech\SpeechClient;
+use Ixudra\Curl\Facades\Curl;
 
 class ConversationController extends Controller {
 
     private $googleSpeech;
     private $googleCredentials;
+    private $watsonAssistantBase;
+    private $watsonAssistantWorkspace;
+    private $watsonAssistantVersion;
+    private $watsonAssistantUsername;
+    private $watsonAssistantPassword;
 
     public function __construct() {
         $this->googleCredentials = json_decode(Storage::disk('audios')->get('kalu.credentials.json'), true);
@@ -22,6 +28,11 @@ class ConversationController extends Controller {
             'languageCode' => 'es-CO',
             'keyFile' =>  $this->googleCredentials
         ]);
+        $this->watsonAssistantBase = env('API_WATSON_ASSIANT_BASE');
+        $this->watsonAssistantWorkspace = env('API_WATSON_ASSIANT_WORKSPACE');
+        $this->watsonAssistantVersion = env('API_WATSON_ASSIANT_VERSION');
+        $this->watsonAssistantUsername = env('API_WATSON_ASSIANT_USERNAME');
+        $this->watsonAssistantPassword = env('API_WATSON_ASSIANT_PASSWORD');
     }
 
     public function sendMessage(Request $request) {
@@ -98,13 +109,28 @@ class ConversationController extends Controller {
         }
 
         $result = $operation->results();
-        
+
         if(count($result)){
           $alternative = $result[0]->topAlternative();
-          return response()->json(["error" => false, "message" => $alternative]);
+          $transcript = $alternative['transcript'];
+          $wtResponse = $this->getResponseFromWatson($transcript);
+          return response()->json(["error" => false, "message" => $wtResponse]);
         } else {
           return response()->json(["error" => true, "message" => "Audio no reconocido"]);
         }
+    }
+
+    public function getResponseFromWatson($message = "") {
+      $textobj = new stdClass();
+      $textobj->text = $message;
+      $response = Curl::to($this->watsonAssistantBase . "/v1/workspaces/" . $this->watsonAssistantWorkspace . "/message?version=" . $this->watsonAssistantVersion )
+        ->withData( array( 'input' =>  $textobj) )
+        ->asJson( true )
+        ->withHeader('Content-Type: application/json')
+        ->withOption('HTTPAUTH', CURLAUTH_BASIC)
+        ->withOption('USERPWD', "$this->watsonAssistantUsername:$this->watsonAssistantPassword")
+        ->post();
+      return $response;
     }
 
     public function uploadAudio(Request $request){

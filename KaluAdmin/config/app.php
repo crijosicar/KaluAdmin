@@ -162,7 +162,7 @@ return [
          */
         'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
         MarkTopper\DoctrineDBALTimestampType\Laravel5ServiceProvider::class,
-
+        Ixudra\Curl\CurlServiceProvider::class,
     ],
 
     /*
@@ -212,7 +212,8 @@ return [
         /**
          * Custom aliases
          */
-         'JWTAuth' => 'Tymon\JWTAuth\Facades\JWTAuth'
+         'JWTAuth' => 'Tymon\JWTAuth\Facades\JWTAuth',
+         'Curl'          => Ixudra\Curl\Facades\Curl::class,
     ],
 
 ];

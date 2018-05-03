@@ -10,7 +10,8 @@
         "tymon/jwt-auth": "^0.5.12",
         "doctrine/dbal": "^2.4",
         "marktopper/doctrine-dbal-timestamp-type": "^1.0",
-        "google/cloud-speech": "^0.13.0"
+        "google/cloud-speech": "^0.13.0",
+        "ixudra/curl": "6.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
