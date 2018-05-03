@@ -82,12 +82,13 @@ class ConversationController extends Controller {
               'messages' => $messages
             ]);
         }
-        $file = Storage::disk('audios')->get($request->input('audio'));
+        $storagePath = Storage::disk('audios')->getDriver()->getAdapter()->getPathPrefix();
         $options = [
             'encoding' => 'LINEAR16',
             'sampleRateHertz' => 16000,
         ];
-        $operation = $this->googleSpeech->beginRecognizeOperation($file, $options);
+        $urlAudio = $storagePath . $request->input('audio');
+        $operation = $this->googleSpeech->beginRecognizeOperation(fopen($urlAudio, 'r'), $options);
 
         $isComplete = $operation->isComplete();
         while (!$isComplete) {
@@ -95,10 +96,15 @@ class ConversationController extends Controller {
             $operation->reload();
             $isComplete = $operation->isComplete();
         }
-        $result = $operation->results()[0];
-        $alternative = $result->topAlternative();
 
-        return response()->json(["error" => false, "message" => $alternative]);
+        $result = $operation->results();
+        
+        if(count($result)){
+          $alternative = $result[0]->topAlternative();
+          return response()->json(["error" => false, "message" => $alternative]);
+        } else {
+          return response()->json(["error" => true, "message" => "Audio no reconocido"]);
+        }
     }
 
     public function uploadAudio(Request $request){
