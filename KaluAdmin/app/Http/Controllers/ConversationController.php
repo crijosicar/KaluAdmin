@@ -8,8 +8,21 @@ use App\Models\Conversaciones;
 use DB;
 use stdClass;
 use Carbon\Carbon;
+use Storage;
+use Google\Cloud\Speech\SpeechClient;
 
 class ConversationController extends Controller {
+
+    private $googleSpeech;
+    private $googleCredentials;
+
+    public function __construct() {
+        $this->googleCredentials = json_decode(Storage::disk('audios')->get('kalu.credentials.json'), true);
+        $this->googleSpeech = new SpeechClient([
+            'languageCode' => 'es-CO',
+            'keyFile' =>  $this->googleCredentials
+        ]);
+    }
 
     public function sendMessage(Request $request) {
         $messages = [
@@ -42,6 +55,69 @@ class ConversationController extends Controller {
           'error' => false,
           'result' => $result
         ]);
+    }
+
+    public function sendAudioMessage(Request $request) {
+
+        $messages = [
+            'required' => 'El :attribute es requerido.',
+        ];
+
+        $validations = [
+            'audio' => 'required',
+            'is_bot' => 'required'
+        ];
+
+        $niceNames = array(
+            'audio' => 'audio',
+            'is_bot' => 'bot',
+        );
+
+        $validator = Validator::make($request->all(), $validations, $messages, $niceNames);
+
+        if ($validator->fails()) {
+            $messages = $validator->messages();
+            return response()->json([
+              'error' => true,
+              'messages' => $messages
+            ]);
+        }
+        $file = Storage::disk('audios')->get($request->input('audio'));
+        $options = [
+            'encoding' => 'LINEAR16',
+            'sampleRateHertz' => 16000,
+        ];
+        $operation = $this->googleSpeech->beginRecognizeOperation($file, $options);
+
+        $isComplete = $operation->isComplete();
+        while (!$isComplete) {
+            sleep(1);
+            $operation->reload();
+            $isComplete = $operation->isComplete();
+        }
+        $result = $operation->results()[0];
+        $alternative = $result->topAlternative();
+
+        return response()->json(["error" => false, "message" => $alternative]);
+    }
+
+    public function uploadAudio(Request $request){
+      if($request->hasFile("audio")){
+        $uniqid = uniqid();
+        $fileName = $uniqid . "audio.mp4";
+        Storage::disk('audios')->put($fileName, file_get_contents($request->file('audio')->getRealPath()));
+        $storagePath = Storage::disk('audios')->getDriver()->getAdapter()->getPathPrefix();
+        $this->convertAudioToLinear16($storagePath . $fileName, $storagePath . $uniqid."audio.pcm");
+        sleep(5);
+        return response()->json(["error" => false, "path_audio" => $fileName]);
+      }
+      return response()->json(["error" => true, "message" => "No hay archivo"]);
+    }
+
+    public function convertAudioToLinear16($source_filename, $output_filename){
+      $command = "ffmpeg -y -i $source_filename -r 16 -filter:v 'setpts=0.25*PTS' -acodec pcm_s16le -f s16le -ac 1 -ar 16000 $output_filename 2>&1";
+      $output = shell_exec($command);
+      return $output;
     }
 
     public function getMessagesXUser(Request $request) {
