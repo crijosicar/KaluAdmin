@@ -114,6 +114,17 @@ class ConversationController extends Controller {
           $alternative = $result[0]->topAlternative();
           $transcript = $alternative['transcript'];
           $wtResponse = $this->getResponseFromWatson($transcript);
+
+          $payload = $request->all();
+          $payload['mensaje'] = $transcript;
+          Conversaciones::create($payload);
+
+          if($wtResponse['output']['nodes_visited'][0] === "En otras cosas"){
+            $payload['mensaje'] = $wtResponse['output']['text'][0];
+            $payload['is_bot'] = 1;
+            Conversaciones::create($payload);
+          }
+
           return response()->json(["error" => false, "message" => $wtResponse]);
         } else {
           return response()->json(["error" => true, "message" => "Audio no reconocido"]);
