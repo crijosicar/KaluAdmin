@@ -114,12 +114,17 @@ class ConversationController extends Controller {
           $alternative = $result[0]->topAlternative();
           $transcript = $alternative['transcript'];
           $wtResponse = $this->getResponseFromWatson($transcript);
-
           $payload = $request->all();
           $payload['mensaje'] = $transcript;
+          $now = new Carbon();
+          $now->setTimezone('America/Bogota');
+          $payload['fecha_creacion'] = $now->toDateTimeString();
           Conversaciones::create($payload);
 
           if($wtResponse['output']['nodes_visited'][0] === "En otras cosas"){
+            $time = new Carbon();
+            $time->setTimezone('America/Bogota');
+            $payload['fecha_creacion'] = $time->toDateTimeString();
             $payload['mensaje'] = $wtResponse['output']['text'][0];
             $payload['is_bot'] = 1;
             Conversaciones::create($payload);
