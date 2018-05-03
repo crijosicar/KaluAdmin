@@ -141,7 +141,7 @@ class ConversationController extends Controller {
         $storagePath = Storage::disk('audios')->getDriver()->getAdapter()->getPathPrefix();
         $this->convertAudioToLinear16($storagePath . $fileName, $storagePath . $uniqid."audio.pcm");
         sleep(5);
-        return response()->json(["error" => false, "path_audio" => $fileName]);
+        return response()->json(["error" => false, "path_audio" => $uniqid."audio.pcm"]);
       }
       return response()->json(["error" => true, "message" => "No hay archivo"]);
     }
