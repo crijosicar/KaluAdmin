@@ -62,9 +62,12 @@ class ConversationController extends Controller {
         $now->setTimezone('America/Bogota');
         $payload['fecha_creacion'] = $now->toDateTimeString();
         $result = Conversaciones::create($payload);
+
+        $wtResponse = $this->getResponseFromWatson($payload['mensaje']);
+
         return response()->json([
           'error' => false,
-          'result' => $result
+          'message' => $wtResponse
         ]);
     }
 
@@ -93,11 +96,13 @@ class ConversationController extends Controller {
               'messages' => $messages
             ]);
         }
+
         $storagePath = Storage::disk('audios')->getDriver()->getAdapter()->getPathPrefix();
         $options = [
             'encoding' => 'LINEAR16',
             'sampleRateHertz' => 16000,
         ];
+
         $urlAudio = $storagePath . $request->input('audio');
         $operation = $this->googleSpeech->beginRecognizeOperation(fopen($urlAudio, 'r'), $options);
 
@@ -107,7 +112,6 @@ class ConversationController extends Controller {
             $operation->reload();
             $isComplete = $operation->isComplete();
         }
-
         $result = $operation->results();
 
         if(count($result)){
@@ -146,7 +150,6 @@ class ConversationController extends Controller {
         Storage::disk('audios')->put($fileName, file_get_contents($request->file('audio')->getRealPath()));
         $storagePath = Storage::disk('audios')->getDriver()->getAdapter()->getPathPrefix();
         $this->convertAudioToLinear16($storagePath . $fileName, $storagePath . $uniqid."audio.pcm");
-        sleep(5);
         return response()->json(["error" => false, "path_audio" => $uniqid."audio.pcm"]);
       }
       return response()->json(["error" => true, "message" => "No hay archivo"]);
@@ -155,6 +158,7 @@ class ConversationController extends Controller {
     public function convertAudioToLinear16($source_filename, $output_filename){
       $command = "ffmpeg -y -i $source_filename -r 16 -filter:v 'setpts=0.25*PTS' -acodec pcm_s16le -f s16le -ac 1 -ar 16000 $output_filename 2>&1";
       $output = shell_exec($command);
+      sleep(2);
       return $output;
     }
 
