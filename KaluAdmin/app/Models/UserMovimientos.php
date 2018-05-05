@@ -16,11 +16,11 @@ class UserMovimientos extends Model
 {
 	// Attributes.
 	protected $table = 'user_movimientos';
-	
+
         protected $fillable = ['user_id', 'movimiento_id'];
-	
+
         protected $guarded = ['id'];
-        
+
         protected $hidden = [ 'created_at', 'updated_at', 'deleted_at' ];
-	/* ---- Everything after this line will be preserved. ---- */
+
 }

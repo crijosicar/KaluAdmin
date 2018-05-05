@@ -19,12 +19,11 @@ class Movimientos extends Model
 {
 	// Attributes.
 	protected $table = 'movimientos';
-	
-        protected $fillable = ['tipo_movimiento_id', 'tipo_transaccion_id', 'monto', 'detalle_movimiento_id', 'fecha_movimiento' ];
-	
+
+        protected $fillable = ['tipo_movimiento_id', 'tipo_transaccion_id', 'monto', 'detalle_movimiento_id', 'fecha_movimiento'];
+
         protected $guarded = ['id'];
-	
+
         protected $hidden = [ 'created_at', 'updated_at', 'deleted_at' ];
 
-        
 }

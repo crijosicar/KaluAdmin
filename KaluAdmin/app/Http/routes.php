@@ -39,6 +39,10 @@ Route::group(['middleware' => ['api','cors'], 'prefix' => 'api'], function () {
       Route::post('get-messages', 'ConversationController@getMessagesXUser');
       Route::post('send-audio-message', 'ConversationController@sendAudioMessage');
       Route::post('set-response-kalu', 'ConversationController@setResponseFromKalu');
+
+      //Routes for transactions
+      Route::post('add-transaction', 'TransactionController@addTransaction');
+      Route::post('add-items-transaction', 'TransactionController@addItemsTransaction');
     });
 
 });

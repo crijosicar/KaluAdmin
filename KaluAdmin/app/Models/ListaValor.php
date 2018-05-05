@@ -16,11 +16,11 @@ class ListaValor extends Model
 {
 	// Attributes.
 	protected $table = 'lista_valor';
-	
+
         protected $fillable = ['categoria', 'valor'];
-	
+
         protected $guarded = ['id'];
-	
+
         protected $hidden = [ 'created_at', 'updated_at', 'deleted_at' ];
-	/* ---- Everything after this line will be preserved. ---- */
+
 }
