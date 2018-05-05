@@ -30,7 +30,7 @@ class RegisterController extends Controller{
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users',
             'name' => 'required',
-            'password' => 'required|between:6,10|alpha_num',
+            'password' => 'required|between:6,20|alpha_num',
             'password_confirm' => 'required|same:password'
         ], $messages, $niceNames);
 
