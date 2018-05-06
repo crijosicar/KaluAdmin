@@ -43,6 +43,10 @@ Route::group(['middleware' => ['api','cors'], 'prefix' => 'api'], function () {
       //Routes for transactions
       Route::post('add-transaction', 'TransactionController@addTransaction');
       Route::post('add-items-transaction', 'TransactionController@addItemsTransaction');
+
+      //Routes for wallet
+      Route::post('get-incomes-expenses-by-user', 'WalletController@getIncomesAndExpensesByUser');
+
     });
 
 });

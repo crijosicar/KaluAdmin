@@ -104,7 +104,7 @@ class TransactionController extends Controller {
         $movementDetail->monto = $value['monto'];
         if(!$movementDetail->save()) $valid = false;
       }
-      
+
       if(!$valid){
         return response()->json(["error" => true, "message" =>  "Algunos productos no pudieron ser agregados"]);
       }
