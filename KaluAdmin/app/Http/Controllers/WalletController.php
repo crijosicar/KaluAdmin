@@ -56,7 +56,7 @@ class WalletController extends Controller {
       $minDate = $request->input('anho') . '-' . str_pad($request->input('mes'), 2, "0", STR_PAD_LEFT) . '-01 00:00:00';
       $maxDate = $request->input('anho') . '-' . str_pad($request->input('mes'), 2, "0", STR_PAD_LEFT) . '-' . $lastDayFromMonth->day .' 00:00:00';
 
-      $results = DB::select("SELECT lvl.valor AS categoria,
+      $results = DB::select("SELECT LCASE(lvl.valor) AS categoria,
                                     sum(dmv.monto) AS valor
                               FROM movimientos AS mov
                                 INNER JOIN user_movimientos AS umv ON (mov.id = umv.movimiento_id)
@@ -74,13 +74,12 @@ class WalletController extends Controller {
                               ]
                             );
 
-                            $labels = [];
-                            $values = [];
-
-                            foreach ($results as $key => $value) {
-                              array_push($labels, $value->categoria);
-                              array_push($values, $value->valor);
-                            }
+      $labels = [];
+      $values = [];
+      foreach ($results as $key => $value) {
+        array_push($labels, $value->categoria);
+        array_push($values, $value->valor);
+      }
 
       if($request->input('tipo_transaccion') === "INGRESO"){
         $response = [
@@ -95,5 +94,58 @@ class WalletController extends Controller {
       }
 
       return response()->json(["error" => true, "message" => $response]);
+    }
+
+    public function getIncomesAndExpectedExpensesByUser(Request $request) {
+
+      $messages = [
+          'required' => 'El campo :attribute es requerido.',
+      ];
+
+      $niceNames = array(
+          'user_id' => 'ID de usuario',
+          'token' => 'token',
+          'tipo_transaccion' => 'tipo de transacción'
+      );
+
+      $validator = Validator::make($request->all(), [
+          'user_id' => 'required',
+          'token' => 'required',
+          'tipo_transaccion' => 'required'
+      ], $messages, $niceNames);
+
+      if ($validator->fails()) {
+          $messages = $validator->messages();
+          return response()->json([
+            'error' => true,
+            'messages' => $messages
+          ]);
+      }
+
+      $tipoTransaccion = ListaValor::where("categoria", "TIPO_TRANSACCION")
+                                    ->where("valor", $request->input('tipo_transaccion'))
+                                    ->first();
+
+      $results = DB::select("SELECT lvl.valor AS categoria,
+                                    dmv.monto AS valor
+                              FROM movimientos AS mov
+                                INNER JOIN user_movimientos AS umv ON (mov.id = umv.movimiento_id)
+                                INNER JOIN detalle_movimiento AS dmv ON (mov.id = dmv.movimiento_id)
+                                INNER JOIN lista_valor AS lvl ON (dmv.categoria_activo_id = lvl.id)
+                              WHERE mov.tipo_transaccion_id = :tipo_transaccion_id
+                                AND umv.user_id = :user_id",
+                              [
+                                'tipo_transaccion_id' => $tipoTransaccion->id,
+                                'user_id' => $request->input('user_id')
+                              ]
+                          );
+
+        foreach ($$results as $key => $value) {
+
+        }
+
+
+      dd($results);
+      return response()->json(["error" => true, "message" => $results]);
     }
 }
