@@ -93,7 +93,7 @@ class WalletController extends Controller {
         ];
       }
 
-      return response()->json(["error" => true, "message" => $response]);
+      return response()->json(["error" => false, "message" => $response]);
     }
 
     public function getIncomesAndExpensesExpectedByUser(Request $request) {
@@ -138,7 +138,7 @@ class WalletController extends Controller {
                                 'tipo_transaccion_id' => $tipoTransaccion->id,
                                 'user_id' => $request->input('user_id')
                               ]
-                          );
+                            );
 
       $comidaList = array_filter($results, function ($element) { return ($element->categoria == "COMIDA"); } );
       $ropaList = array_filter($results, function ($element) { return ($element->categoria == "ROPA"); } );
@@ -158,6 +158,6 @@ class WalletController extends Controller {
         "ropa" => $sumRopa / count($ropaList)
       ];
 
-      return response()->json(["error" => true, "message" => $resultado]);
+      return response()->json(["error" => false, "message" => $resultado]);
     }
 }
