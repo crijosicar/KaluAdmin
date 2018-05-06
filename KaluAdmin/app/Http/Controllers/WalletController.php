@@ -157,12 +157,7 @@ class WalletController extends Controller {
         "comida" => $sumComida / count($comidaList),
         "ropa" => $sumRopa / count($ropaList)
       ];
+
       return response()->json(["error" => true, "message" => $resultado]);
-    }
-
-
-    function byCategory($category){
-        // returns whether the input integer is even
-        return(!($var & 1));
     }
 }
