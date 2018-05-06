@@ -76,9 +76,10 @@ class WalletController extends Controller {
 
       $labels = [];
       $values = [];
+
       foreach ($results as $key => $value) {
         array_push($labels, $value->categoria);
-        array_push($values, $value->valor);
+        array_push($values, (float) $value->valor);
       }
 
       if($request->input('tipo_transaccion') === "INGRESO"){
