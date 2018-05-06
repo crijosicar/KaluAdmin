@@ -46,7 +46,7 @@ Route::group(['middleware' => ['api','cors'], 'prefix' => 'api'], function () {
 
       //Routes for wallet
       Route::post('get-incomes-expenses-by-user', 'WalletController@getIncomesAndExpensesByUser');
-      Route::post('get-expected-incomes-expenses-by-user', 'WalletController@getIncomesAndExpectedExpensesByUser');
+      Route::post('get-expected-incomes-expenses-by-user', 'WalletController@getIncomesAndExpensesExpectedByUser');
     });
 
 });

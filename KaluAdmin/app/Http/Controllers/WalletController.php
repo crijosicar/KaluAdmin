@@ -96,7 +96,7 @@ class WalletController extends Controller {
       return response()->json(["error" => true, "message" => $response]);
     }
 
-    public function getIncomesAndExpectedExpensesByUser(Request $request) {
+    public function getIncomesAndExpensesExpectedByUser(Request $request) {
 
       $messages = [
           'required' => 'El campo :attribute es requerido.',
@@ -140,12 +140,29 @@ class WalletController extends Controller {
                               ]
                           );
 
-        foreach ($$results as $key => $value) {
+      $comidaList = array_filter($results, function ($element) { return ($element->categoria == "COMIDA"); } );
+      $ropaList = array_filter($results, function ($element) { return ($element->categoria == "ROPA"); } );
 
-        }
+      $sumComida = 0;
+      foreach ($comidaList as $key => $value) {
+        $sumComida =  $sumComida + $value->valor;
+      }
+
+      $sumRopa = 0;
+      foreach ($ropaList as $key => $value) {
+        $sumRopa = $sumRopa + $value->valor;
+      }
+
+      $resultado = [
+        "comida" => $sumComida / count($comidaList),
+        "ropa" => $sumRopa / count($ropaList)
+      ];
+      return response()->json(["error" => true, "message" => $resultado]);
+    }
 
 
-      dd($results);
-      return response()->json(["error" => true, "message" => $results]);
+    function byCategory($category){
+        // returns whether the input integer is even
+        return(!($var & 1));
     }
 }
