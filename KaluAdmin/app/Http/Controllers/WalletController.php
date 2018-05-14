@@ -194,7 +194,7 @@ class WalletController extends Controller {
 
       //INGRESO
 
-      $depositoList = array_filter($results, function ($element) { return ($element->categoria == "DEPOSITO"); } );
+      $depositoList = array_filter($results, function ($element) { return ($element->categoria == "DEPOSITOS"); } );
       $salarioList = array_filter($results, function ($element) { return ($element->categoria == "SALARIO"); } );
       $ahorrosList = array_filter($results, function ($element) { return ($element->categoria == "AHORROS"); } );
 
