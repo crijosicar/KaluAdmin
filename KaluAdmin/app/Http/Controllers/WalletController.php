@@ -141,8 +141,16 @@ class WalletController extends Controller {
                               ]
                             );
 
+      //EGRESO
+
       $comidaList = array_filter($results, function ($element) { return ($element->categoria == "COMIDA"); } );
       $ropaList = array_filter($results, function ($element) { return ($element->categoria == "ROPA"); } );
+      $facturasList = array_filter($results, function ($element) { return ($element->categoria == "FACTURAS"); } );
+      $comunicacionesList = array_filter($results, function ($element) { return ($element->categoria == "COMUNICACIONES"); } );
+      $entretenimientoList = array_filter($results, function ($element) { return ($element->categoria == "ENTRETENIMIENTO"); } );
+      $saludList = array_filter($results, function ($element) { return ($element->categoria == "SALUD"); } );
+      $hogarList = array_filter($results, function ($element) { return ($element->categoria == "HOGAR"); } );
+      $transporteList = array_filter($results, function ($element) { return ($element->categoria == "TRANSPORTE"); } );
 
       $sumComida = 0;
       foreach ($comidaList as $key => $value) {
@@ -154,10 +162,132 @@ class WalletController extends Controller {
         $sumRopa = $sumRopa + $value->valor;
       }
 
-      $resultado = [
-        "comida" => $sumComida / count($comidaList),
-        "ropa" => $sumRopa / count($ropaList)
-      ];
+      $sumFacturas = 0;
+      foreach ($facturasList as $key => $value) {
+        $sumFacturas =  $sumFacturas + $value->valor;
+      }
+
+      $sumComunicaciones = 0;
+      foreach ($comunicacionesList as $key => $value) {
+        $sumComunicaciones = $sumComunicaciones + $value->valor;
+      }
+
+      $sumEntretenimiento = 0;
+      foreach ($entretenimientoList as $key => $value) {
+        $sumEntretenimiento = $sumEntretenimiento + $value->valor;
+      }
+
+      $sumSalud = 0;
+      foreach ($saludList as $key => $value) {
+        $sumSalud =  $sumSalud + $value->valor;
+      }
+
+      $sumHogar = 0;
+      foreach ($hogarList as $key => $value) {
+        $sumHogar = $sumHogar + $value->valor;
+      }
+
+      $sumTransporte = 0;
+      foreach ($transporteList as $key => $value) {
+        $sumTransporte = $sumTransporte + $value->valor;
+      }
+
+      //INGRESO
+
+      $depositoList = array_filter($results, function ($element) { return ($element->categoria == "DEPOSITO"); } );
+      $salarioList = array_filter($results, function ($element) { return ($element->categoria == "SALARIO"); } );
+      $ahorrosList = array_filter($results, function ($element) { return ($element->categoria == "AHORROS"); } );
+
+      $sumDeposito = 0;
+      foreach ($depositoList as $key => $value) {
+        $sumDeposito =  $sumDeposito + $value->valor;
+      }
+
+      $sumSalario = 0;
+      foreach ($salarioList as $key => $value) {
+        $sumSalario = $sumSalario + $value->valor;
+      }
+
+      $sumAhorros = 0;
+      foreach ($ahorrosList as $key => $value) {
+        $sumAhorros = $sumAhorros + $value->valor;
+      }
+
+      $comidaDiv = 0;
+      $ropaDiv = 0;
+      $facturasDiv = 0;
+      $entretenimientoDiv = 0;
+      $comunicacionesDiv = 0;
+      $hogarDiv = 0;
+      $saludDiv = 0;
+      $transporteDiv = 0;
+
+      $depositoDiv = 0;
+      $salarioDiv = 0;
+      $ahorrosDiv = 0;
+
+      if(count($comidaList) > 0){
+        $comidaDiv = $sumComida / count($comidaList);
+      }
+
+      if(count($ropaList) > 0){
+        $ropaDiv = $sumRopa / count($ropaList);
+      }
+
+      if(count($facturasList) > 0){
+        $facturasDiv = $sumFacturas / count($facturasList);
+      }
+
+      if(count($comunicacionesList) > 0){
+        $comunicacionesDiv = $sumComunicaciones / count($comunicacionesList);
+      }
+
+      if(count($entretenimientoList) > 0){
+        $entretenimientoDiv = $sumEntretenimiento / count($entretenimientoList);
+      }
+
+      if(count($saludList) > 0){
+        $saluDiv = $sumSalud / count($saludList);
+      }
+
+      if(count($hogarList) > 0){
+        $hogarDiv = $sumHogar / count($hogarList);
+      }
+
+      if(count($transporteList) > 0){
+        $transporteDiv = $sumTransporte / count($transporteList);
+      }
+
+      if(count($depositoList) > 0){
+        $depositoDiv = $sumDeposito / count($depositoList);
+      }
+
+      if(count($salarioList) > 0){
+        $salarioDiv = $sumSalario / count($salarioList);
+      }
+
+      if(count($ahorrosList) > 0){
+        $ahorrosDiv = $sumAhorros / count($ahorrosList);
+      }
+
+      if($request->input('tipo_transaccion') === "EGRESO"){
+        $resultado = [
+          "comida" => $comidaDiv,
+          "ropa" => $ropaDiv,
+          "facturas" => $facturasDiv,
+          "entretenimiento" => $entretenimientoDiv,
+          "comunicaciones" => $comunicacionesDiv,
+          "hogar" => $hogarDiv,
+          "salud" => $saludDiv,
+          "transporte" => $transporteDiv
+        ];
+      } else {
+        $resultado = [
+          "deposito" => $depositoDiv,
+          "salario" => $salarioDiv,
+          "ahorros" => $ahorrosDiv
+        ];
+      }
 
       return response()->json(["error" => false, "message" => $resultado]);
     }
