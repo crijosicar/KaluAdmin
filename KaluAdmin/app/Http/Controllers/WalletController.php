@@ -96,6 +96,71 @@ class WalletController extends Controller {
 
       return response()->json(["error" => false, "message" => $response]);
     }
+    public function getPeriodIncomesAndExpensesExpectedByUser(Request $request){
+      $messages = [
+        'required' => 'El campo :attribute es requerido.',
+    ];
+
+    $niceNames = array(
+        'user_id' => 'ID de usuario',
+        'token' => 'token',
+        'tipo_transaccion' => 'tipo de transacción'
+    );
+
+    $validator = Validator::make($request->all(), [
+        'user_id' => 'required',
+        'token' => 'required',
+        'tipo_transaccion' => 'required'
+    ], $messages, $niceNames);
+
+    if ($validator->fails()) {
+        $messages = $validator->messages();
+        return response()->json([
+          'error' => true,
+          'messages' => $messages
+        ]);
+    }
+
+    $tipoTransaccion = ListaValor::where("categoria", "TIPO_TRANSACCION")
+                                    ->where("valor", $request->input('tipo_transaccion'))
+                                    ->first();
+
+      $results = DB::select("SELECT lvl.valor AS categoria,
+                                    dmv.created_at AS valor
+                              FROM movimientos AS mov
+                                INNER JOIN user_movimientos AS umv ON (mov.id = umv.movimiento_id)
+                                INNER JOIN detalle_movimiento AS dmv ON (mov.id = dmv.movimiento_id)
+                                INNER JOIN lista_valor AS lvl ON (dmv.categoria_activo_id = lvl.id)
+                              WHERE mov.tipo_transaccion_id = :tipo_transaccion_id
+                                AND umv.user_id = :user_id",
+                              [
+                                'tipo_transaccion_id' => $tipoTransaccion->id,
+                                'user_id' => $request->input('user_id')
+                              ]
+                            );
+
+    
+      //EGRESO
+
+      $comidaList = array_filter($results, function ($element) { return ($element->categoria == "COMIDA"); } );
+      $ropaList = array_filter($results, function ($element) { return ($element->categoria == "ROPA"); } );
+      $facturasList = array_filter($results, function ($element) { return ($element->categoria == "FACTURAS"); } );
+      $comunicacionesList = array_filter($results, function ($element) { return ($element->categoria == "COMUNICACIONES"); } );
+      $entretenimientoList = array_filter($results, function ($element) { return ($element->categoria == "ENTRETENIMIENTO"); } );
+      $saludList = array_filter($results, function ($element) { return ($element->categoria == "SALUD"); } );
+      $hogarList = array_filter($results, function ($element) { return ($element->categoria == "HOGAR"); } );
+      $transporteList = array_filter($results, function ($element) { return ($element->categoria == "TRANSPORTE"); } );
+      
+      
+      //INGRESO
+
+      $depositoList = array_filter($results, function ($element) { return ($element->categoria == "DEPOSITOS"); } );
+      $salarioList = array_filter($results, function ($element) { return ($element->categoria == "SALARIO"); } );
+      $ahorrosList = array_filter($results, function ($element) { return ($element->categoria == "AHORROS"); } );
+
+      dd($comidaList);                      
+    }
+
 
     public function getIncomesAndExpensesExpectedByUser(Request $request) {
 
