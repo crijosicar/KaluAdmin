@@ -247,7 +247,7 @@ class WalletController extends Controller {
       }
 
       if(count($saludList) > 0){
-        $saluDiv = $sumSalud / count($saludList);
+        $saludDiv = $sumSalud / count($saludList);
       }
 
       if(count($hogarList) > 0){
