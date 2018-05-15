@@ -4,15 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Validator;
-use App\Models\Movimientos;
 use App\Models\ListaValor;
-use App\Models\UserMovimientos;
-use App\Models\DetalleMovimiento;
 use DB;
-use stdClass;
 use Carbon\Carbon;
-use Storage;
-use Ixudra\Curl\Facades\Curl;
 
 class WalletController extends Controller {
 
@@ -312,7 +306,7 @@ class WalletController extends Controller {
       }
 
       if(count($saludList) > 0){
-        $saluDiv = $sumSalud / count($saludList);
+        $saludDiv = $sumSalud / count($saludList);
       }
 
       if(count($hogarList) > 0){
