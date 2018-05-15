@@ -449,30 +449,6 @@ class WalletController extends Controller {
                 ]
         );
 
-        //$labels = [];
-        //$values = [];
-        
-        //dd($results);
-        
-        /*foreach ($results as $key => $value) {
-            array_push($labels, $value->categoria);
-            array_push($values, (float) $value->valor);
-        }
-
-        if ($request->input('tipo_transaccion') === "INGRESO") {
-            $response = [
-                "income_labels" => $labels,
-                "income_values" => $values
-            ];
-        } else {
-            $response = [
-                "expense_labels" => $labels,
-                "expense_values" => $values
-            ];
-        }
-        
-        dd($response);*/
-
         return response()->json(["error" => false, "message" => $results]);
     }
 
