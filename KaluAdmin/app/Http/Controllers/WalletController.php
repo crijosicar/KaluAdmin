@@ -135,24 +135,35 @@ class WalletController extends Controller {
                                   'categoria_activo_id' => $categoriaActivo->id,
                                   'user_id' => $request->input('user_id')
                                 ]);
-        $unit = "hours";
+        $unit = "horas";
         if(count($results) && count($results) > 1){
             $dateOne = Carbon::createFromFormat('Y-m-d H:i:s', $results[0]->created_at);
             $dateTwo = Carbon::createFromFormat('Y-m-d H:i:s', $results[count($results) - 1]->created_at);
 
-            $diffhours = $dateOne->diffInHours($dateTwo);
-            $diffhours = $diffhours / count($results);
+            $diffDates = $dateOne->diffInHours($dateTwo);
+            $diffDates = $diffDates / count($results);
 
-            if($diffhours <= 1){
-              $unit = "minutes";
-              $diffhours = $diffhours * 60;
+            if($diffDates <= 1 ){
+              $unit = "minutos";
+
+              $diffDates = $dateOne->diffInMinutes($dateTwo);
+              $diffDates = $diffDates / count($results);
+
+              if($diffDates <= 1 ){
+                $diffDates = $dateOne->diffInSeconds($dateTwo);
+                $diffDates =$diffDates / count($results);
+
+                $unit = "segundos";
+
+              }
+
             }
 
             return response()->json([
                         'error' => false,
                         'messages' => array(
                           "unit" => $unit,
-                          "value" => round($diffhours, 0)
+                          "value" => round($diffDates, 0)
                         )
             ]);
         }
