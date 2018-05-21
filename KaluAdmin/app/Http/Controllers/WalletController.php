@@ -148,13 +148,13 @@ class WalletController extends Controller {
 
             if($diffDates < 1){
               $unit = "minutos";
-              $diffDates = $dateOne->diffInHours($dateTwo);
-              $diffDates = ($diffDates * 60) / (count($results)-1);
+              $diffDates = $dateOne->diffInMinutes($dateTwo);
+              $diffDates = ($diffDates) / (count($results)-1);
 
-              if($diffDates <= 1){
+              if($diffDates < 1){
                 $unit = "segundos";
-                $diffDates = $dateOne->diffInHours($dateTwo);
-                $diffDates = ($diffDates * 3600) / (count($results)-1);
+                $diffDates = $dateOne->diffInSeconds($dateTwo);
+                $diffDates = ($diffDates) / (count($results)-1);
               }
 
             }
