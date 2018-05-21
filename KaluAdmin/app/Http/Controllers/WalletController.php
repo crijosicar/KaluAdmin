@@ -130,7 +130,7 @@ class WalletController extends Controller {
                                   INNER JOIN users AS usrs ON (usms.user_id = usrs.id)
                                 WHERE dmvo.categoria_activo_id = :categoria_activo_id
                                   AND usrs.id = :user_id
-                                ORDER BY DATE(dmvo.updated_at) DESC",
+                                ORDER BY STR_TO_DATE(dmvo.created_at, '1 1:1:1.000002') DESC",
                                 [
                                   'categoria_activo_id' => $categoriaActivo->id,
                                   'user_id' => $request->input('user_id')
@@ -144,18 +144,15 @@ class WalletController extends Controller {
             $diffDates = $dateOne->diffInHours($dateTwo);
             $diffDates = $diffDates / count($results);
 
-            if($diffDates <= 1){
+            if($diffDates < 1){
               $unit = "minutos";
-
               $diffDates = $dateOne->diffInHours($dateTwo);
               $diffDates = ($diffDates * 60) / count($results);
 
               if($diffDates <= 1){
+                $unit = "segundos";
                 $diffDates = $dateOne->diffInHours($dateTwo);
                 $diffDates = ($diffDates * 3600) / count($results);
-
-                $unit = "segundos";
-
               }
 
             }
