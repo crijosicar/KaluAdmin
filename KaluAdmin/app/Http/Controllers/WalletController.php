@@ -135,6 +135,7 @@ class WalletController extends Controller {
                                   'categoria_activo_id' => $categoriaActivo->id,
                                   'user_id' => $request->input('user_id')
                                 ]);
+
         $unit = "horas";
         if(count($results) && count($results) > 1){
             $dateOne = Carbon::createFromFormat('Y-m-d H:i:s', $results[0]->created_at);
@@ -143,15 +144,15 @@ class WalletController extends Controller {
             $diffDates = $dateOne->diffInHours($dateTwo);
             $diffDates = $diffDates / count($results);
 
-            if($diffDates <= 1 ){
+            if($diffDates <= 1){
               $unit = "minutos";
 
               $diffDates = $dateOne->diffInHours($dateTwo);
-              $diffDates = $diffDates * 60 / count($results);
+              $diffDates = ($diffDates * 60) / count($results);
 
-              if($diffDates <= 1 ){
+              if($diffDates <= 1){
                 $diffDates = $dateOne->diffInHours($dateTwo);
-                $diffDates =$diffDates * 3600 / count($results);
+                $diffDates = ($diffDates * 3600) / count($results);
 
                 $unit = "segundos";
 
