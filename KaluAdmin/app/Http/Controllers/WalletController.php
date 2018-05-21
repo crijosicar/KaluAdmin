@@ -123,14 +123,16 @@ class WalletController extends Controller {
                                       ->where("valor", $request->input('categoria_activo'))
                                       ->first();
 
-        $results = DB::select("SELECT dmvo.*
-                               FROM detalle_movimiento AS dmvo
-                                  INNER JOIN movimientos AS mvto ON (dmvo.movimiento_id = mvto.id)
-                                  INNER JOIN user_movimientos AS usms ON (mvto.id =  usms.movimiento_id)
-                                  INNER JOIN users AS usrs ON (usms.user_id = usrs.id)
-                                WHERE dmvo.categoria_activo_id = :categoria_activo_id
-                                  AND usrs.id = :user_id
-                                ORDER BY STR_TO_DATE(dmvo.created_at, '1 1:1:1.000002') DESC",
+        $results = DB::select("SELECT TEMP.*
+                                FROM
+                                    (SELECT dmvo.*
+                                   FROM detalle_movimiento AS dmvo
+                                      INNER JOIN movimientos AS mvto ON (dmvo.movimiento_id = mvto.id)
+                                      INNER JOIN user_movimientos AS usms ON (mvto.id =  usms.movimiento_id)
+                                      INNER JOIN users AS usrs ON (usms.user_id = usrs.id)
+                                    WHERE dmvo.categoria_activo_id = :categoria_activo_id
+                                      AND usrs.id = :user_id) AS TEMP
+                                    ORDER BY TEMP.created_at DESC",
                                 [
                                   'categoria_activo_id' => $categoriaActivo->id,
                                   'user_id' => $request->input('user_id')
