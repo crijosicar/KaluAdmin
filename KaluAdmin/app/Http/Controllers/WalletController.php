@@ -144,17 +144,17 @@ class WalletController extends Controller {
             $dateTwo = Carbon::createFromFormat('Y-m-d H:i:s', $results[count($results) - 1]->created_at);
 
             $diffDates = $dateOne->diffInHours($dateTwo);
-            $diffDates = $diffDates / count($results);
+            $diffDates = $diffDates / (count($results)-1);
 
             if($diffDates < 1){
               $unit = "minutos";
               $diffDates = $dateOne->diffInHours($dateTwo);
-              $diffDates = ($diffDates * 60) / count($results);
+              $diffDates = ($diffDates * 60) / (count($results)-1);
 
               if($diffDates <= 1){
                 $unit = "segundos";
                 $diffDates = $dateOne->diffInHours($dateTwo);
-                $diffDates = ($diffDates * 3600) / count($results);
+                $diffDates = ($diffDates * 3600) / (count($results)-1);
               }
 
             }
